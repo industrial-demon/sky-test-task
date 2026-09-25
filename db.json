@@ -1,0 +1,24 @@
+{
+  "products": [
+    { "id": 1, "name": "Зошит 48 листів", "groupId": 1, "stock": 120, "minStock": 20, "price": 25 },
+    { "id": 2, "name": "Ручка кулькова синя", "groupId": 1, "stock": 8, "minStock": 30, "price": 12 },
+    { "id": 3, "name": "Папір А4 (500 арк.)", "groupId": 1, "stock": 4, "minStock": 10, "price": 180 },
+    { "id": 4, "name": "Клей-олівець", "groupId": 2, "stock": 45, "minStock": 15, "price": 22 },
+    { "id": 5, "name": "Ножиці канцелярські", "groupId": 2, "stock": 2, "minStock": 5, "price": 60 },
+    { "id": 6, "name": "Маркер перманентний", "groupId": 2, "stock": 33, "minStock": 10, "price": 35 },
+    { "id": 7, "name": "Файл А4 (100 шт.)", "groupId": 3, "stock": 6, "minStock": 8, "price": 95 },
+    { "id": 8, "name": "Папка-реєстратор", "groupId": 3, "stock": 18, "minStock": 5, "price": 75 },
+    { "id": 9, "name": "Скотч канцелярський", "groupId": 3, "stock": 1, "minStock": 12, "price": 18 },
+    { "id": 10, "name": "Блокнот А5", "groupId": 1, "stock": 27, "minStock": 10, "price": 40 }
+  ],
+  "groups": [
+    { "id": 1, "name": "Письмове приладдя" },
+    { "id": 2, "name": "Інструменти" },
+    { "id": 3, "name": "Папір та архівація" }
+  ],
+  "history": [
+    { "id": 1, "productId": 2, "type": "sale", "amount": -5, "date": "2026-09-10T10:00:00.000Z" },
+    { "id": 2, "productId": 9, "type": "sale", "amount": -3, "date": "2026-09-12T14:30:00.000Z" },
+    { "id": 3, "productId": 5, "type": "sale", "amount": -1, "date": "2026-09-15T09:15:00.000Z" }
+  ]
+}

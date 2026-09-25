@@ -1,0 +1,18 @@
+# Заглушка пайплайну, орієнтована на GitLab CI. Запускати її нікуди не треба —
+# досить переконатись, що описані нижче команди реально проходять локально
+# на чистому `npm install` (без кешу node_modules).
+
+stages:
+  - lint
+  - test
+
+lint:
+  stage: lint
+  script:
+    - npm install
+    - npm run lint
+
+test:
+  stage: test
+  script:
+    - npm run test:run

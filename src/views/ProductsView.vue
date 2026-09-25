@@ -16,13 +16,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="product in store.items"
-            :key="product.id"
-            class="products__row"
-            :class="{ 'products__row--selected': product.id === selectedId }"
-            @click="selectedId = product.id"
-          >
+          <tr v-if="store.error" :style="{color: 'red'}">
+            <td colspan="4">
+              {{ store.error }}
+            </td>
+          </tr>
+          <tr v-for="product in store.items" :key="product.id" class="products__row" :class="{ 'products__row--selected': product.id === selectedId }" @click="selectedId = product.id">
             <td>{{ product.name }}</td>
             <td>{{ product.stock }}</td>
             <td>{{ product.minStock }}</td>
@@ -31,34 +30,28 @@
         </tbody>
       </table>
 
-      <ProductCard
-        v-if="selectedProduct"
-        :product="selectedProduct"
-        @close="selectedId = null"
-      />
+      <ProductCard v-if="selectedProduct" :product="selectedProduct" :key="selectedProduct.id" @close="selectedId = null" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useProductsStore } from '../stores/products'
-import ProductCard from '../components/ProductCard.vue'
+import { ref, computed, onMounted, watch } from "vue";
+import { useProductsStore } from "../stores/products";
+import ProductCard from "../components/ProductCard.vue";
 
-const store = useProductsStore()
-const selectedId = ref(null)
+const store = useProductsStore();
+const selectedId = ref(null);
 
-const selectedProduct = computed(() =>
-  store.items.find((item) => item.id === selectedId.value)
-)
+const selectedProduct = computed(() => store.items.find((item) => item.id === selectedId.value));
 
 function refresh() {
-  store.fetchProducts()
+  store.fetchProducts();
 }
 
 onMounted(() => {
-  store.fetchProducts()
-})
+  store.fetchProducts();
+});
 </script>
 
 <style scoped>

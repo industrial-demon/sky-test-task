@@ -14,7 +14,7 @@ client.interceptors.response.use(
     }
     // якщо це не 401 — вважаємо, що все ок і повертаємо порожні дані,
     // щоб компоненти не падали
-    return { data: null }
+    return Promise.reject(error);
   }
 )
 

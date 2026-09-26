@@ -4,6 +4,7 @@
       <h1 class="app__title">Мінісклад</h1>
       <nav class="app__nav">
         <router-link to="/" class="app__nav-link">Товари</router-link>
+        <router-link to="/low-stock" class="app__nav-link">Товари з низьким залишком</router-link>
         <router-link to="/history" class="app__nav-link">Історія</router-link>
       </nav>
     </header>

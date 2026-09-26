@@ -8,6 +8,12 @@ export const useProductsStore = defineStore("products", {
     error: null,
   }),
 
+  getters: {
+    lowStockProducts() {
+      return this.items.filter((p) => p.stock < p.minStock);
+    },
+  },
+
   actions: {
     async fetchProducts() {
       this.loading = true;

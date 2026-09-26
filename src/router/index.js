@@ -11,6 +11,11 @@ const routes = [
     name: 'history',
     component: () => import('../views/HistoryView.vue'),
   },
+    {
+    path: '/low-stock',
+    name: 'low-stock',
+    component: () => import('../views/LowStockProducts.vue'),
+  },
 ]
 
 const router = createRouter({

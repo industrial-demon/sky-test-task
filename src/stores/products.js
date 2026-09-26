@@ -18,11 +18,6 @@ export const useProductsStore = defineStore("products", {
   },
 
   actions: {
-    clearUpdateStatus() {
-      if (this.updateStatus) {
-        this.updateStatus = null;
-      }
-    },
     async fetchProducts() {
       this.loading = true;
       this.error = null;
@@ -37,7 +32,7 @@ export const useProductsStore = defineStore("products", {
       }
     },
 
-    async updateStock(productId, stock) {
+    async updateStock(productId, stock, { onSuccess, onError }= {}) {
       this.isUpdating = true;
       try {
         await client.patch(`/products/${productId}`, { stock });
@@ -45,9 +40,9 @@ export const useProductsStore = defineStore("products", {
         if (product) {
           product.stock = stock;
         }
-        this.updateStatus = "success";
+        onSuccess?.();
       } catch (e) {
-        this.updateStatus = "error";
+        onError?.(e.message);
       } finally {
         this.isUpdating = false;
       }

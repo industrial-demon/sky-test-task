@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from "vue";
-const props = defineProps<{ product: any }>();
+const props = defineProps<{ product: any , updateStatus: any}>();
 
 const emit = defineEmits<{
-  "on-submit": [{ productId: string; stock: string }];
-  "on-close": [];
+  "submit-produt": [{ productId: string; stock: string }];
+  "close-dialog": [];
 }>();
 
 const isOpenDialog = ref(false);
@@ -27,9 +27,14 @@ function onDocumentClick(event: MouseEvent) {
   }
 }
 
+
+watch(()=>props.updateStatus, (s)=> {
+ console.log(s)
+});
+
 watch(isOpenDialog, (open) => {
   if (!open) {
-    emit("on-close");
+    emit("close-dialog");
   }
 });
 
@@ -40,7 +45,7 @@ onMounted(() => {
 onUnmounted(() => {
   document.removeEventListener("click", onDocumentClick);
   if (isOpenDialog.value) {
-    emit("on-close");
+    emit("close-dialog");
   }
 });
 </script>
@@ -52,7 +57,7 @@ onUnmounted(() => {
 
   <dialog class="product-dialog" ref="dialogRef" v-bind:open="isOpenDialog">
     <div class="heading">{{ props.product.name }}</div>
-    <form v-on:submit.prevent="$emit('on-submit', { productId: props.product.id, stock: stock })">
+    <form v-on:submit.prevent="$emit('submit-produt', { productId: props.product.id, stock: stock })">
       <div class="dialog-controls">
         <input v-model="stock" />
         <button type="submit">Save</button>
@@ -61,7 +66,8 @@ onUnmounted(() => {
 
     Update status:
     <div>
-      <slot name="status"></slot>
+       <div v-if="updateStatus === 'success'" :style="{ color: 'green' }">Продукт успіщно оновленно</div>
+       <div v-if="updateStatus === 'error'" :style="{ color: 'red' }">Щось пійшло не так</div>
     </div>
   </dialog>
 </template>

@@ -10,7 +10,7 @@
           class="history__amount"
           :class="entry.amount < 0 ? 'history__amount--minus' : 'history__amount--plus'"
         >
-          {{ formatAmount(entry.amount) }}
+          {{ formatAmount(entry.product.stock - entry.product.minStock) }}
         </span>
       </li>
     </ul>

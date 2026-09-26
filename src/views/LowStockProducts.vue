@@ -8,6 +8,7 @@ const productStore = useProductsStore();
 const groupStore = useGroupsStore();
 
 const selectedGroup = ref("ALL");
+const updateStatus = ref(null);
 
 const filterdLowStockProducts = computed(() => {
   if (selectedGroup.value === "ALL") {
@@ -18,11 +19,18 @@ const filterdLowStockProducts = computed(() => {
 });
 
 async function updateStock({ productId, stock }) {
-  await productStore.updateStock(productId, stock);
+  await productStore.updateStock(productId, stock, {
+    onSuccess: () => {
+      updateStatus.value = "success";
+    },
+    onError: () => {
+      updateStatus.value = "error";
+    },
+  });
 }
 
-function onCloseDialog() {
-  productStore.clearUpdateStatus();
+function clearUpdateStatus() {
+  updateStatus.value = null
 }
 
 onMounted(() => {
@@ -53,17 +61,10 @@ onMounted(() => {
     <li class="product-list__item" v-for="product in filterdLowStockProducts" :key="product.id">
       {{ product.name }} -
       {{ product.stock }}
-      <ProductDialog v-bind:product="product" v-on:on-submit="updateStock" v-on:on-close="onCloseDialog">
+      <ProductDialog v-bind:product="product" v-bind:updateStatus="updateStatus" v-on:submit-produt="updateStock"
+        v-on:close-dialog="clearUpdateStatus">
         <template v-slot:trigger="{ toggleDialog }">
           <button v-on:click="toggleDialog">Додати +</button>
-        </template>
-        <template v-slot:status>
-          <div v-if="productStore.updateStatus === 'success'" :style="{ color: 'green' }">
-             Продукт успіщно оновленно
-          </div>
-          <div v-if="productStore.updateStatus === 'error'" :style="{ color: 'red' }">
-             Щось пійшло не так
-          </div>
         </template>
       </ProductDialog>
     </li>
@@ -88,9 +89,11 @@ onMounted(() => {
 .group-select {
   height: 24px;
 }
+
 .filters {
   margin: 15px 0px;
 }
+
 .filters__controls {
   display: flex;
   gap: 12px;

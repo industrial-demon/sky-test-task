@@ -28,3 +28,9 @@ failed to solve: builder: failed to resolve source metadata for docker.io/librar
 
 
 5. проблема в package-lock.json , тому що треба соблюдати весрсіонку пакетів які на проекті
+
+
+Окремо — історія операцій: наскількі я зрозумів це тіпо щось таке
+entry.product.stock - entry.product.minStock
+
+але без уточнень тажко сказати що мали на увазі і яка формула

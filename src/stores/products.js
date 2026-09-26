@@ -6,6 +6,9 @@ export const useProductsStore = defineStore("products", {
     items: [],
     loading: false,
     error: null,
+
+    isUpdating: false,
+    updateStatus: null,
   }),
 
   getters: {
@@ -15,6 +18,11 @@ export const useProductsStore = defineStore("products", {
   },
 
   actions: {
+    clearUpdateStatus() {
+      if (this.updateStatus) {
+        this.updateStatus = null;
+      }
+    },
     async fetchProducts() {
       this.loading = true;
       this.error = null;
@@ -31,11 +39,18 @@ export const useProductsStore = defineStore("products", {
 
     async updateStock(productId, stock) {
       const currentItems = this.items;
-      await client.patch(`/products/${productId}`, { stock });
-
-      const product = currentItems.find((item) => item.id === productId);
-      if (product) {
-        product.stock = stock;
+      this.isUpdating = true;
+      try {
+        await client.patch(`/products/${productId}`, { stock });
+        const product = currentItems.find((item) => item.id === productId);
+        if (product) {
+          product.stock = stock;
+        }
+        this.updateStatus = "success";
+      } catch (e) {
+        this.updateStatus = "error";
+      } finally {
+        this.isUpdating = false;
       }
     },
   },

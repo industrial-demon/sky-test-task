@@ -17,9 +17,12 @@ const filterdLowStockProducts = computed(() => {
   return productStore.lowStockProducts.filter((p) => p.groupId === selectedGroup.value);
 });
 
-async function updateStock({productId, stock}) {
-  console.log(productId, stock);
-  // productStore.updateStock(id, stock);
+async function updateStock({ productId, stock }) {
+  await productStore.updateStock(productId, stock);
+}
+
+function onCloseDialog() {
+  productStore.clearUpdateStatus();
 }
 
 onMounted(() => {
@@ -46,25 +49,28 @@ onMounted(() => {
     </div>
   </header>
 
-
   <ul class="product-list">
-
-
-
-  <li class="product-list__item" v-for="product in filterdLowStockProducts" :key="product.id">
-    {{ product.name  }} -
-    {{ product.stock }}
-    <ProductDialog v-bind:product="product" v-on:on-submit="updateStock">
-      <template v-slot:trigger="{ toggleDialog }">
-        <button v-on:click="toggleDialog">Додати +</button>
-      </template>
-    </ProductDialog>
-  </li>
+    <li class="product-list__item" v-for="product in filterdLowStockProducts" :key="product.id">
+      {{ product.name }} -
+      {{ product.stock }}
+      <ProductDialog v-bind:product="product" v-on:on-submit="updateStock" v-on:on-close="onCloseDialog">
+        <template v-slot:trigger="{ toggleDialog }">
+          <button v-on:click="toggleDialog">Додати +</button>
+        </template>
+        <template v-slot:status>
+          <div v-if="productStore.updateStatus === 'success'" :style="{ color: 'green' }">
+             Продукт успіщно оновленно
+          </div>
+          <div v-if="productStore.updateStatus === 'error'" :style="{ color: 'red' }">
+             Щось пійшло не так
+          </div>
+        </template>
+      </ProductDialog>
+    </li>
   </ul>
 </template>
 
 <style>
-
 .product-list {
   display: flex;
   flex-direction: column;
@@ -73,7 +79,6 @@ onMounted(() => {
   padding: 0;
   list-style: none;
 }
-
 
 .product-list__item {
   display: flex;

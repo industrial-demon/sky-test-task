@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 const props = defineProps<{ product: any }>();
 
 const emit = defineEmits<{
   "on-submit": [{ productId: string; stock: string }];
+  "on-close": [];
 }>();
 
 const isOpenDialog = ref(false);
@@ -26,12 +27,21 @@ function onDocumentClick(event: MouseEvent) {
   }
 }
 
+watch(isOpenDialog, (open) => {
+  if (!open) {
+    emit("on-close");
+  }
+});
+
 onMounted(() => {
   document.addEventListener("click", onDocumentClick);
 });
 
 onUnmounted(() => {
   document.removeEventListener("click", onDocumentClick);
+  if (isOpenDialog.value) {
+    emit("on-close");
+  }
 });
 </script>
 
@@ -43,15 +53,26 @@ onUnmounted(() => {
   <dialog class="product-dialog" ref="dialogRef" v-bind:open="isOpenDialog">
     <div class="heading">{{ props.product.name }}</div>
     <form v-on:submit.prevent="$emit('on-submit', { productId: props.product.id, stock: stock })">
-      <div>
+      <div class="dialog-controls">
         <input v-model="stock" />
         <button type="submit">Save</button>
       </div>
     </form>
+
+    Update status:
+    <div>
+      <slot name="status"></slot>
+    </div>
   </dialog>
 </template>
 
 <style scoped>
+.dialog-controls {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 24px;
+}
 .heading {
   margin-bottom: 12px;
   border-bottom: 1px solid gray;

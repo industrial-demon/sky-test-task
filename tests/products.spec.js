@@ -27,8 +27,7 @@ describe('useProductsStore', () => {
     expect(store.loading).toBe(false)
   })
 
-  // TODO: тимчасово вимкнено, падає
-  it.skip('повинен оновлювати кількість товару навіть якщо items оновились паралельно', async () => {
+  it('повинен оновлювати кількість товару навіть якщо items оновились паралельно', async () => {
     client.get.mockResolvedValueOnce({ data: [{ id: 1, name: 'Зошит', stock: 10 }] })
     const store = useProductsStore()
     await store.fetchProducts()

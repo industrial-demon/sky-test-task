@@ -38,11 +38,10 @@ export const useProductsStore = defineStore("products", {
     },
 
     async updateStock(productId, stock) {
-      const currentItems = this.items;
       this.isUpdating = true;
       try {
         await client.patch(`/products/${productId}`, { stock });
-        const product = currentItems.find((item) => item.id === productId);
+        const product = this.items.find((item) => item.id === productId);
         if (product) {
           product.stock = stock;
         }

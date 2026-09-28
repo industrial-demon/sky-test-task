@@ -1,5 +1,15 @@
+<script>
+export function filterLowStockProductsByGroup(products, selectedGroup) {
+  if (selectedGroup === "ALL") {
+    return products;
+  }
+
+  return products.filter((p) => p.groupId === selectedGroup);
+}
+</script>
+
 <script setup>
-import { onMounted, computed, ref, watch } from "vue";
+import { onMounted, computed, ref } from "vue";
 import { useProductsStore } from "../stores/products";
 import { useGroupsStore } from "../stores/groups";
 import ProductDialog from "../components/ProductDialog.vue";
@@ -11,11 +21,7 @@ const selectedGroup = ref("ALL");
 const updateStatus = ref(null);
 
 const filterdLowStockProducts = computed(() => {
-  if (selectedGroup.value === "ALL") {
-    return productStore.lowStockProducts;
-  }
-
-  return productStore.lowStockProducts.filter((p) => p.groupId === selectedGroup.value);
+  return filterLowStockProductsByGroup(productStore.lowStockProducts, selectedGroup.value);
 });
 
 async function updateStock({ productId, stock }) {
